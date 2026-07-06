@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Shield, Recycle, Truck, HeartHandshake, ArrowRight, MessageCircle, X } from "lucide-react";
+import { Shield, Recycle, Truck, HeartHandshake, ArrowRight, MessageCircle, Calendar, User } from "lucide-react";
+import axios from "axios";
 import Hero from "../components/Hero";
 import SectionHeading from "../components/SectionHeading";
 import ProductCard from "../components/ProductCard";
 import ValueCard from "../components/ValueCard";
 import { buildWhatsAppLink, WHATSAPP_GREETING } from "../utils/whatsapp";
+
+const api = axios.create({ baseURL: "/api/v1/" });
 
 const FEATURED_PRODUCTS = [
   {
@@ -63,47 +66,47 @@ const MARKETS = [
   "Wholesalers & Food Processors",
 ];
 
-const LOCATIONS = [
-  {
-    image: "/images/products/now-available.jpg",
-    product: "Cayenne Powder 250g",
-    location: "Gouji Shopping Complex, Shop A-13C, Area 49, Lilongwe",
-  },
-];
-
 export default function Home() {
-  const [preview, setPreview] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+
+  useEffect(() => {
+    api.get("news/", { params: { status: "published", page_size: 3 } })
+      .then((res) => setArticles(res.data.results ?? res.data))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    api.get("announcements/")
+      .then((res) => setAnnouncements(res.data.results ?? res.data))
+      .catch(() => {});
+  }, []);
 
   return (
     <>
-      {preview && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-          onClick={() => setPreview(null)}
-        >
-          <div
-            className="max-w-lg rounded-xl bg-white p-6 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between">
-              <h3 className="text-lg font-bold text-brand-dark">{preview.product}</h3>
-              <button onClick={() => setPreview(null)} aria-label="Close preview">
-                <X size={20} className="text-brand-gray hover:text-brand-dark" />
-              </button>
-            </div>
-            <img
-              src={preview.image}
-              alt={preview.product}
-              className="mt-4 w-full rounded-lg object-cover"
-            />
-            <p className="mt-4 text-sm text-brand-gray leading-relaxed">
-              {preview.location}
-            </p>
+      <Hero />
+
+      {announcements.length > 0 && (
+        <div className="overflow-hidden bg-brand-orange py-3">
+          <div className="animate-scroll flex gap-12 whitespace-nowrap text-sm font-medium text-white">
+            {announcements.map((a) => (
+              <span key={a.id}>
+                {a.title}
+                {a.link_text && a.link_url && (
+                  <a
+                    href={a.link_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 font-semibold underline underline-offset-2 transition-colors hover:text-brand-dark"
+                  >
+                    {a.link_text}
+                  </a>
+                )}
+              </span>
+            ))}
           </div>
         </div>
       )}
-
-      <Hero />
 
       <section className="bg-white px-4 py-16 md:py-20">
         <div className="mx-auto max-w-3xl text-center">
@@ -137,31 +140,70 @@ export default function Home() {
 
       <section className="bg-white px-4 py-16 md:py-20">
         <div className="mx-auto max-w-7xl">
-          <SectionHeading>Now Available</SectionHeading>
+          <SectionHeading>News &amp; Updates</SectionHeading>
           <p className="mt-4 text-center text-brand-gray">
-            Find our products at these locations across Lilongwe.
+            Latest news and articles from Kudimba Farms.
           </p>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {LOCATIONS.map((item) => (
-              <button
-                key={item.product}
-                onClick={() => setPreview(item)}
-                className="flex cursor-pointer items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:shadow-md"
-              >
-                <img
-                  src={item.image}
-                  alt={item.product}
-                  className="h-20 w-20 shrink-0 rounded-lg object-cover"
-                />
-                <div>
-                  <h3 className="font-bold text-brand-dark">{item.product}</h3>
-                  <p className="mt-1 text-sm text-brand-gray leading-snug">
-                    {item.location}
-                  </p>
-                </div>
-              </button>
-            ))}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => {
+              const date = article.published_at
+                ? new Date(article.published_at).toLocaleDateString("en-MW", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "";
+              return (
+                <Link
+                  key={article.id}
+                  to={`/news/${article.slug}/`}
+                  className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg"
+                >
+                  {article.featured_image && (
+                    <img
+                      src={article.featured_image}
+                      alt={article.title}
+                      className="h-48 w-full object-cover"
+                    />
+                  )}
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold text-brand-dark">
+                      {article.title}
+                    </h3>
+                    {article.excerpt && (
+                      <p className="mt-2 text-sm leading-relaxed text-brand-gray line-clamp-3">
+                        {article.excerpt}
+                      </p>
+                    )}
+                    <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                      {article.author_name && (
+                        <span className="flex items-center gap-1">
+                          <User size={14} />
+                          {article.author_name}
+                        </span>
+                      )}
+                      {date && (
+                        <span className="flex items-center gap-1">
+                          <Calendar size={14} />
+                          {date}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
+          {articles.length > 0 && (
+            <div className="mt-8 text-center">
+              <Link
+                to="/news"
+                className="inline-flex items-center gap-2 font-semibold text-brand-dark underline underline-offset-4 decoration-brand-orange transition-colors hover:text-brand-orange"
+              >
+                View All Articles <ArrowRight size={16} />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

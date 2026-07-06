@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X, MessageCircle, LogIn } from "lucide-react";
 import { buildWhatsAppLink, WHATSAPP_GREETING } from "../utils/whatsapp";
 
 const NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/products", label: "Products" },
+  { to: "/news", label: "News" },
+  { to: "/announcements", label: "Announcements" },
   { to: "/quality", label: "Quality & Sustainability" },
   { to: "/contact", label: "Contact / Order" },
 ];
@@ -63,6 +65,14 @@ export default function Navbar() {
             </a>
           </li>
         </ul>
+
+        <Link
+          to="/admin/login"
+          className="ml-2 shrink-0 rounded p-2 transition-colors hover:text-brand-orange"
+          title="Admin Login"
+        >
+          <LogIn size={20} />
+        </Link>
       </div>
     </nav>
   );

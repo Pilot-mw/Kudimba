@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MessageCircle, Phone, Mail, MapPin } from "lucide-react";
+import { MessageCircle, Phone, Mail, MapPin, ExternalLink } from "lucide-react";
 import { buildWhatsAppLink, WHATSAPP_GREETING } from "../utils/whatsapp";
 
 const QUICK_LINKS = [
@@ -61,6 +61,17 @@ export default function Footer() {
               >
                 <MessageCircle size={16} />
                 Chat on WhatsApp
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://facebook.com/kudimbafarms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-gray-300 transition-colors hover:text-brand-orange"
+              >
+                <ExternalLink size={16} />
+                facebook.com/kudimbafarms
               </a>
             </li>
           </ul>

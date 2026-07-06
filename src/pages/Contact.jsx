@@ -1,4 +1,4 @@
-import { Phone, MessageCircle, Clock, MapPin } from "lucide-react";
+import { Phone, MessageCircle, Clock, MapPin, ExternalLink } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
 import EnquiryForm from "../components/EnquiryForm";
 import { buildWhatsAppLink, WHATSAPP_GREETING } from "../utils/whatsapp";
@@ -45,6 +45,21 @@ export default function Contact() {
                     <p className="font-semibold text-brand-dark">Business Hours</p>
                     <p className="text-sm text-brand-gray">Mon–Fri: 8:00 AM – 5:00 PM</p>
                     <p className="text-sm text-brand-gray">Sat: 9:00 AM – 1:00 PM</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <ExternalLink size={20} className="mt-0.5 shrink-0 text-brand-orange" />
+                  <div>
+                    <p className="font-semibold text-brand-dark">Follow Us</p>
+                    <a
+                      href="https://facebook.com/kudimbafarms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-brand-gray transition-colors hover:text-brand-orange"
+                    >
+                      facebook.com/kudimbafarms
+                    </a>
                   </div>
                 </div>
               </div>
