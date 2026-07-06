@@ -5,4 +5,8 @@ django-cors-headers>=4.3,<4.4
 django-filter>=24.1,<24.2
 Pillow>=11.1,<12.0
 python-decouple>=3.8,<3.9
+whitenoise>=6.7,<7.0
+# PostgreSQL
 psycopg2-binary>=2.9,<3.0
+# MySQL (uncomment for PythonAnywhere free tier)
+# mysqlclient>=2.2,<3.0
