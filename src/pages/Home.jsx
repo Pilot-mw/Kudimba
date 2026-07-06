@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Shield, Recycle, Truck, HeartHandshake, ArrowRight, MessageCircle, Calendar, User } from "lucide-react";
-import axios from "axios";
 import Hero from "../components/Hero";
 import SectionHeading from "../components/SectionHeading";
 import ProductCard from "../components/ProductCard";
 import ValueCard from "../components/ValueCard";
 import { buildWhatsAppLink, WHATSAPP_GREETING } from "../utils/whatsapp";
 
-const api = axios.create({ baseURL: "/api/v1/" });
+import api from "../api";
 
 const FEATURED_PRODUCTS = [
   {

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, User } from "lucide-react";
-import axios from "axios";
-
-const api = axios.create({ baseURL: "/api/v1/" });
+import api from "../api";
 
 export default function News() {
   const [articles, setArticles] = useState([]);

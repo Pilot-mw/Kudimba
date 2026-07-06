@@ -10,8 +10,10 @@ export const removeToken = () => localStorage.removeItem(TOKEN_KEY);
 
 export const isAuthenticated = () => !!getToken();
 
+const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1/';
+
 const api = axios.create({
-  baseURL: '/api/v1/',
+  baseURL: BASE_URL,
 });
 
 api.interceptors.request.use(

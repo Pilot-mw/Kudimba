@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Calendar, User, ArrowLeft } from "lucide-react";
-import axios from "axios";
-
-const api = axios.create({ baseURL: "/api/v1/" });
+import api from "../api";
 
 function renderContent(html) {
   if (!html) return "";
